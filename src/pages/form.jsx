@@ -3,15 +3,23 @@ import { useState } from "react"
 export default function form(){
     const [nome, setNome] = useState("")
     const [idade, setIdade] = useState("")
+    const [usuarios, setUsuarios] = useState([])
 
-    function salvarUsuario(){
-        fetch('/api/form', {
+    async function salvarUsuario(){
+        await fetch('/api/form', {
             method: 'POST',
             body: JSON.stringify({nome, idade})
         })
+
+        const resp = await fetch('/api/form')
+        const usuarios = await resp.json()
+        setUsuarios(usuarios)
     }
-
-
+    function renderezarUsuarios(){
+        return usuarios.map((usuario, i) => {
+            return <li key={i}>{usuario.nome} tem {usuario.idade} anos </li>
+        })
+    }
 
     return(
         <div>
@@ -20,7 +28,11 @@ export default function form(){
                 onChange= {e => setNome(e.target.value)}/>
             <input type="number" value= {idade}
                 onChange= {e => setIdade(+e.target.value)}/>
-            <button onClick={salvarUsuario}>Enviar</button>    
+            <button onClick={salvarUsuario}>Enviar</button>
+
+            <ul>
+                {renderezarUsuarios()}
+            </ul>    
         </div>
     )
 }
