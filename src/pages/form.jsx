@@ -12,7 +12,7 @@ export default function form(){
         })
 
         setNome("")
-        setIdade("")
+        setIdade(0)
 
         const resp = await fetch('/api/form')
         const usuarios = await resp.json()
